@@ -1,0 +1,24 @@
+Package: paramGUI
+Title: A Shiny GUI for some Parameter Estimation Examples
+Version: 2.0
+Authors@R: c(person("Joris", "Snellenburg", role = c("cre","aut"),
+		     email = "j.snellenburg@vu.nl"),
+	      person("Katharine", "Mullen", role = "aut"),
+	      person("Ivo", "van Stokkum", role = "aut",
+		     email = "ivo@few.vu.nl"))
+Description: Allows specification and fitting of some parameter
+    estimation examples inspired by time-resolved spectroscopy via
+    a Shiny GUI.
+Depends: R (>= 3.2.2), TIMP, shiny, shinydashboard, colorspace, fields
+License: GPL (>= 2)
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 5.0.1
+NeedsCompilation: no
+Packaged: 2016-06-16 10:30:05 UTC; jsg210
+Author: Joris Snellenburg [cre, aut],
+  Katharine Mullen [aut],
+  Ivo van Stokkum [aut]
+Maintainer: Joris Snellenburg <j.snellenburg@vu.nl>
+Repository: CRAN
+Date/Publication: 2016-06-16 18:19:04
