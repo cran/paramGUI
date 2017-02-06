@@ -106,7 +106,7 @@ ui <- dashboardPage(
                         textInput("simWavelengthStepSize", label = "Stepsize:", value = "5"))
                ),
                fluidRow(
-                 column(6,numericInput("simFracNoise", label = "Stdev. noise:", value = "0.05", min = 0, step = 0.01)),
+                 column(6,numericInput("simFracNoise", label = "Stdev. noise:", value = "0.01", min = 0, step = 0.01)),
                  column(6,numericInput("simSeed", label = "Seed:", value = "123", min = 0, step = 1))
                ),
                checkboxInput("simEnableIRF", label = "Add Gaussian IRF", value = FALSE, width = NULL),

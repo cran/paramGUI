@@ -1,6 +1,6 @@
 Package: paramGUI
 Title: A Shiny GUI for some Parameter Estimation Examples
-Version: 2.0
+Version: 2.1
 Authors@R: c(person("Joris", "Snellenburg", role = c("cre","aut"),
 		     email = "j.snellenburg@vu.nl"),
 	      person("Katharine", "Mullen", role = "aut"),
@@ -15,10 +15,10 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 5.0.1
 NeedsCompilation: no
-Packaged: 2016-06-16 10:30:05 UTC; jsg210
+Packaged: 2017-02-06 11:21:24 UTC; jsg210
 Author: Joris Snellenburg [cre, aut],
   Katharine Mullen [aut],
   Ivo van Stokkum [aut]
 Maintainer: Joris Snellenburg <j.snellenburg@vu.nl>
 Repository: CRAN
-Date/Publication: 2016-06-16 18:19:04
+Date/Publication: 2017-02-06 14:10:30

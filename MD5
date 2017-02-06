@@ -1,12 +1,12 @@
-e23e04a8fb76a9bc583d9812150d847a *DESCRIPTION
+3a85331dff2a188203b8918010e6fabf *DESCRIPTION
 ca4b4483b23413f63b838c4bb6edea83 *NAMESPACE
 5e109ff68f89b62ee0307a6db7eee2b5 *R/example_dataset.R
 cf932ba0111e1a3724b48d4e877fe081 *R/paramGUI-package.R
-0fdc55a280286db2d0f324ff9cf886b6 *R/paramGUI.R
+7778203c3eb8ee64baa319cb0eae068d *R/paramGUI.R
 4bbf4518dcc20849396752bb69d73c10 *R/runApp.R
 cc087df1a8586b77e6201c15099ccdc8 *R/utility.R
 95775f626026e62de710c49b0ef3dd6c *data/example_dataset.rda
-7c21c341a67843d6c06cf18bf99422a2 *inst/shinyApps/paramGUI/app.R
+d34f6dc90ce2bce34953e3b00ed04cb3 *inst/shinyApps/paramGUI/app.R
 e19c3802ffb2df48e7f4e52ec2f81327 *man/calcE.Rd
 0e716727d857b784e5bdbc9ca67ccbad *man/example_dataset.Rd
 5a1d86746c2690d2174ed89305070761 *man/is_compressed.Rd
