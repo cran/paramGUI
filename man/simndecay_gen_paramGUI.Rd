@@ -79,10 +79,10 @@ simndecay_gen_paramGUI(kinpar, tmax, deltat, specpar = vector(), lmin, lmax,
 \item{nosiminfo}{logical for hiding simulation information}
 }
 \value{
-an object of class "kin"
+an object of class 'kin'
 }
 \description{
-Calculates an object of class "kin". <TODO>
+Calculates an object of class 'kin'. <TODO>
 }
 \author{
 Katharine M. Mullen

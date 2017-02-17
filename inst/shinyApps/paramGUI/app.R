@@ -166,6 +166,7 @@ ui <- dashboardPage(
                h4("Load data"),
                fileInput("loadData",label=NULL),
                tags$script('$( "#loadData" ).on( "click", function() { this.value = null; });'),
+               tags$script('$(document).on("keypress", function (e) { Shiny.onInputChange("keyPressed", e.which); });'),
                # http://stackoverflow.com/questions/34441584/re-upload-same-file-shiny-r
                # TODO: http://stackoverflow.com/questions/17352086/how-can-i-update-a-shiny-fileinput-object
                actionButton('loadDefaultDataButton', label = "Load Default Data"),
@@ -207,7 +208,9 @@ ui <- dashboardPage(
       tabBox(title = "RESULTS",
              id = "outputTabs", height = "700px", width = "670px",
              tabPanel("Data",
-                      plotOutput("dataPlot", height = 650, width = 900)),
+                      plotOutput("dataPlot", height = 650, width = 900)
+                      #,checkboxInput("advPlotting", NULL, value = FALSE, width = NULL)
+                      ),
              tabPanel("Fit progression",
                       verbatimTextOutput("fitProgressOutput")),
              tabPanel("Fit results",
@@ -230,6 +233,7 @@ ui <- dashboardPage(
 server <- function(input, output, session) {
 
   rvs <- reactiveValues()
+  rvs$guessIRF <- FALSE
 
   # output$specControls <- renderUI({
   #  if((input$modelType == "kin" || input$modelType == "spectemp")) {
@@ -291,6 +295,7 @@ server <- function(input, output, session) {
 
     set.seed(isolate(input$simSeed))
 
+    validInput <- TRUE
     kinpar <- as.double(strsplit(isolate(input$simDecayRates),",")[[1]])
     amplitudes <- as.double(strsplit(input$simAmplitudes,",")[[1]])
     spec_loc <- strsplit(isolate(input$simSpecLoc), ",")[[1]]
@@ -301,7 +306,7 @@ server <- function(input, output, session) {
     lmin <- as.double(isolate(input$simMinWavelength))
     lmax <- as.double(isolate(input$simMaxWavelength))
     linAxis <- isolate(input$fitLinAxis)
-    linr <- if(length(linAxis)==0) NA else if(linAxis<0.1) NA else as.double(isolate(input$fitLinAxis))
+    linr <- if(is.na(linAxis)) {NA} else {if(linAxis<0.1) {NA} else {linAxis}}
     deltal <- as.double(isolate(input$simWavelengthStepSize))
     sigma <- as.double(isolate(input$simFracNoise))
     irf <- isolate(input$simEnableIRF)
@@ -325,8 +330,22 @@ server <- function(input, output, session) {
         "irfpar = c(",irfloc,",",irfwidth,")",",",
         "seqmod =",seqmod,")\n")
 
-    if(!is.na(lmin) && !is.na(lmax) && !is.na(tmax) && !is.na(deltal)
-       && length(kinpar)==length(amplitudes) && length(kinpar)==length(spec_loc)) {
+    if(is.na(lmin) || is.na(lmax) || is.na(tmax) || is.na(deltal)) {
+      validInput <- FALSE
+      output$dataPlot <- renderPlot({
+        plotMessage("Error: invalid timepoints or wavelength specification","red")
+      })
+    }
+
+      inputList <- list(kinpar,amplitudes,spec_loc,spec_wid,spec_b)
+      if(!length(unique(sapply(inputList,length)))==1) {
+        validInput <- FALSE
+        output$dataPlot <- renderPlot({
+          plotMessage("Error: parameter fields of unequal length","red")
+        })
+      }
+
+    if(validInput) {
     rvs$simData <- simndecay_gen_paramGUI(kinpar=kinpar,
                                           amplitudes = amplitudes,
                                           tmax=tmax,
@@ -342,7 +361,7 @@ server <- function(input, output, session) {
     # assign(".sim", isolate(rvs$simData) , globalenv())
     updateDataPlot(irfloc, linr)
     } else {
-      print("Invalid simulation input!", file=stderr())
+      cat("Invalid simulation input. No data was generated!", file=stderr())
     }
 
   })
@@ -420,11 +439,11 @@ server <- function(input, output, session) {
             isolate({
               rvs$spectempModel@specpar <- isolate(specvec)
               rvs$spectempFit<-spectemp(isolate(rvs$simData), isolate(rvs$spectempModel), iter=iters, kroncol = kroncol, lin=linr,l_posk=positivepar)
-              rvs$spectempFitSummary <- isolate(rvs$spectempFit$onls)
+              rvs$spectempFitSummary <- summary(isolate(rvs$spectempFit$onls))
               rvs$spectempFitTheta <- isolate(rvs$spectempFit$theta)
               updateConsole(isolate(rvs$modelType))
 
-              updatePlots(isolate(rvs$modelType), isolate(rvs$simData), isolate(rvs$spectempModel), isolate(rvs$spectempFitSummary), isolate(rvs$spectempFitTheta), linr = isolate(linr))
+              updatePlots(isolate(rvs$modelType), isolate(rvs$simData), isolate(rvs$spectempModel), isolate(rvs$spectempFit$onls), isolate(rvs$spectempFitTheta), linr = isolate(linr))
             })
 
           })
@@ -505,15 +524,23 @@ server <- function(input, output, session) {
 
   updatePlots <- function(modType="kin", data, model=NULL, result=NULL, theta=NULL, linr = NA) {
     output$fitPlot <- renderPlot({
-      plotterforGUI(modtype=modType, data=data, model=model, result=result, theta=theta, lin = linr)
+      plotterforGUI(modtype=modType, data=data, model=model, result=result, theta=theta, lin = linr, guessIRF = rvs$guessIRF)
     },res = 96)
   }
 
   updateDataPlot <- function(irfloc, linr) {
     # Plot the simulated data, and render it to the dataPlot field in output.
     output$dataPlot <- renderPlot({
-      plotterforGUI(modtype="kin", data=isolate(rvs$simData), model=NULL, result=NULL,mu=irfloc,lin=linr)
+      plotterforGUI(modtype="kin", data=isolate(rvs$simData), model=NULL, result=NULL,mu=irfloc,lin=linr,guessIRF = rvs$guessIRF)
     },res = 96)
+  }
+
+  plotMessage <- function(plotmsg = "An arror occured",msgcolor = "black") {
+  par(mar = c(0,0,0,0))
+  plot(c(0, 1), c(0, 1), ann = F, bty = 'n', type = 'n', xaxt = 'n', yaxt = 'n')
+  usr <- par( "usr" )
+  text(x = usr[1], y = usr[4], paste(plotmsg), adj = c( 0, 1),
+       cex = 1.6, col = msgcolor)
   }
 
   updateConsole <- function(modelType) {
@@ -528,7 +555,7 @@ server <- function(input, output, session) {
   observe({
     linAxis <- input$fitLinAxis
     linr <- if(is.na(linAxis)) {NA} else {if(linAxis<0.1) {NA} else {linAxis}}
-    irfloc <- as.double(isolate(input$simLocIRF))
+    irfloc <- 0 # as.double(isolate(input$simLocIRF))
     if(!is.null(isolate(rvs$simData))) {
       updateDataPlot(irfloc, linr)
     }
@@ -536,7 +563,8 @@ server <- function(input, output, session) {
     if(!is.null(isolate(rvs$simData))) {
       if(rvs$modelType=="kin" && !is.null(isolate(rvs$kinFit))) updatePlots(isolate(rvs$modelType), isolate(rvs$simData), isolate(rvs$kinModel), isolate(rvs$kinFit), linr = isolate(linr))
       if(rvs$modelType=="spec" && !is.null(isolate(rvs$specFit))) updatePlots(isolate(rvs$modelType), isolate(rvs$simData), isolate(rvs$specModel), isolate(rvs$specFit), linr = isolate(linr))
-      if(rvs$modelType=="spectemp" && !is.null(isolate(rvs$spectempFit))) updatePlots(isolate(rvs$modelType), isolate(rvs$simData), isolate(rvs$spectempModel), isolate(rvs$spectempFitSummary), isolate(rvs$spectempFitTheta), linr = isolate(linr))
+      if(rvs$modelType=="spectemp" && !is.null(isolate(rvs$spectempFit))) updatePlots(isolate(rvs$modelType), isolate(rvs$simData), isolate(rvs$spectempModel), isolate(rvs$spectempFit$onls), isolate(rvs$spectempFitTheta), linr = isolate(linr))
+
     }
   })
 
@@ -580,6 +608,16 @@ server <- function(input, output, session) {
       plotterforGUI(modtype="kin", data=isolate(rvs$simData), model=NULL, result=NULL,mu=0,lin=1)
     },res = 96)
   }
+
+  # Function that listens to key presses
+  observe({
+    if(!is.null(input$keyPressed)) {
+        # cat("You pressed: ",input$keyPressed,file=stderr())
+      if(input$keyPressed==192) { #ctrl+~
+        rvs$guessIRF <- !isolate(rvs$guessIRF)
+      }
+    }
+  })
 
 }
 
