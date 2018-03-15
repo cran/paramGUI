@@ -11,7 +11,7 @@ simndecay_gen_paramGUI(kinpar, tmax, deltat, specpar = vector(), lmin, lmax,
   jvec = vector(), specfun = "gaus", nupow = 1, irffun = "gaus",
   kinscal = vector(), lightregimespec = list(), specdisp = FALSE,
   specdisppar = list(), parmufunc = "exp", specdispindex = list(),
-  amplitudes = vector(), specref = 0, nosiminfo = FALSE)
+  amplitudes = vector(), specref = 0, nosiminfo = TRUE)
 }
 \arguments{
 \item{kinpar}{vector of rate constants}
@@ -89,4 +89,3 @@ Katharine M. Mullen
 
 Ivo H. M. van Stokkum
 }
-

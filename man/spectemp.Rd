@@ -24,4 +24,3 @@ spectemp(sim, model, iter, kroncol = FALSE, lin = NA, l_posk = FALSE)
 \description{
 Spectrotemporal model
 }
-

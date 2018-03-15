@@ -9,4 +9,3 @@ startGUI()
 \description{
 The same as runGUI(), starts the shiny paramGUI app.
 }
-

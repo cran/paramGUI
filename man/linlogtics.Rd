@@ -19,4 +19,3 @@ Returns matrix with new \code{x} values in first column and the corresponding la
 \description{
 Generate linlog tics for a linear-logarithmic axis
 }
-

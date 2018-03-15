@@ -18,4 +18,3 @@ runGUI()
 }
 \keyword{GUI,}
 \keyword{shiny}
-

@@ -17,4 +17,3 @@ boolean, TRUE if the file is compressed
 \description{
 Helper function for is_rdata, checks if the file is a compressed (gzip) file. Does not (yet) check for bzip2 or xz compression.
 }
-

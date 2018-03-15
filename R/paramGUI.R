@@ -576,7 +576,7 @@ spectemp <- function(sim, model, iter, kroncol = FALSE, lin = NA,
   irffun = "gaus", kinscal = vector(), lightregimespec = list(),
   specdisp = FALSE, specdisppar = list(), parmufunc = "exp",
   specdispindex = list(), amplitudes = vector(), specref = 0,
-  nosiminfo = FALSE) {
+  nosiminfo = TRUE) {
   if (tmax > 0) {
     x <- seq(0, tmax, deltat)
   } else {

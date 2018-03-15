@@ -33,4 +33,3 @@ graphics
 \description{
 Master plot function for paramGUI
 }
-

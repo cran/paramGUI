@@ -9,6 +9,7 @@
 
 ## paramGUI dependencies
 library(TIMP)
+library(paramGUI)
 
 ## Shiny app.R dependencies ##
 library(shiny)
@@ -166,7 +167,7 @@ ui <- dashboardPage(
                h4("Load data"),
                fileInput("loadData",label=NULL),
                tags$script('$( "#loadData" ).on( "click", function() { this.value = null; });'),
-               tags$script('$(document).on("keypress", function (e) { Shiny.onInputChange("keyPressed", e.which); });'),
+               tags$script('$(document).on("keypress", function (e) { Shiny.onInputChange("keyPressed", [e.which,e.timeStamp]); });'),
                # http://stackoverflow.com/questions/34441584/re-upload-same-file-shiny-r
                # TODO: http://stackoverflow.com/questions/17352086/how-can-i-update-a-shiny-fileinput-object
                actionButton('loadDefaultDataButton', label = "Load Default Data"),
@@ -210,7 +211,7 @@ ui <- dashboardPage(
              tabPanel("Data",
                       plotOutput("dataPlot", height = 650, width = 900)
                       #,checkboxInput("advPlotting", NULL, value = FALSE, width = NULL)
-                      ),
+             ),
              tabPanel("Fit progression",
                       verbatimTextOutput("fitProgressOutput")),
              tabPanel("Fit results",
@@ -234,6 +235,8 @@ server <- function(input, output, session) {
 
   rvs <- reactiveValues()
   rvs$guessIRF <- FALSE
+  rvs$nosiminfo <- TRUE
+  rvs$DEBUG <- FALSE
 
   # output$specControls <- renderUI({
   #  if((input$modelType == "kin" || input$modelType == "spectemp")) {
@@ -247,7 +250,9 @@ server <- function(input, output, session) {
       paste0(isolate(input$simFilename),"-",timestamp,'.rds', sep='')
     },
     content = function(file) {
-      saveRDS(isolate(rvs$simData), file)
+      sim <- isolate(rvs$simData)
+      save(sim, file=file)
+      #saveRDS(isolate(rvs$simData), file)
     }
   )
 
@@ -315,20 +320,21 @@ server <- function(input, output, session) {
     seqmod <- isolate(input$simSeqmod)
     specvec <- newSpecList(spec_loc, spec_wid, spec_b)
 
-    # TODO: add debug flag
-    cat("# Simulating data with function call: \n")
-    cat("simndecay_gen_paramGUI(kinpar =",deparse(kinpar),",",
-        "amplitudes = ",deparse(amplitudes),",",
-        "tmax = ", tmax,",",
-        "deltat= ", deltat,",",
-        "specpar= ", deparse(specvec), ",",
-        "lmin= ", lmin,",",
-        "lmax= ", lmax,",",
-        "deltal= ", deltal,",",
-        "sigma= ", sigma,",",
-        "irf = ", irf,",",
-        "irfpar = c(",irfloc,",",irfwidth,")",",",
-        "seqmod =",seqmod,")\n")
+    if(rvs$DEBUG) {
+      cat("# Simulating data with function call: \n")
+      cat("simndecay_gen_paramGUI(kinpar =",deparse(kinpar),",",
+          "amplitudes = ",deparse(amplitudes),",",
+          "tmax = ", tmax,",",
+          "deltat= ", deltat,",",
+          "specpar= ", deparse(specvec), ",",
+          "lmin= ", lmin,",",
+          "lmax= ", lmax,",",
+          "deltal= ", deltal,",",
+          "sigma= ", sigma,",",
+          "irf = ", irf,",",
+          "irfpar = c(",irfloc,",",irfwidth,")",",",
+          "seqmod =",seqmod,")\n")
+    }
 
     if(is.na(lmin) || is.na(lmax) || is.na(tmax) || is.na(deltal)) {
       validInput <- FALSE
@@ -337,29 +343,30 @@ server <- function(input, output, session) {
       })
     }
 
-      inputList <- list(kinpar,amplitudes,spec_loc,spec_wid,spec_b)
-      if(!length(unique(sapply(inputList,length)))==1) {
-        validInput <- FALSE
-        output$dataPlot <- renderPlot({
-          plotMessage("Error: parameter fields of unequal length","red")
-        })
-      }
+    inputList <- list(kinpar,amplitudes,spec_loc,spec_wid,spec_b)
+    if(!length(unique(sapply(inputList,length)))==1) {
+      validInput <- FALSE
+      output$dataPlot <- renderPlot({
+        plotMessage("Error: parameter fields of unequal length","red")
+      })
+    }
 
     if(validInput) {
-    rvs$simData <- simndecay_gen_paramGUI(kinpar=kinpar,
-                                          amplitudes = amplitudes,
-                                          tmax=tmax,
-                                          deltat=deltat,
-                                          specpar=specvec,
-                                          lmin=lmin,
-                                          lmax=lmax,
-                                          deltal=deltal,
-                                          sigma=sigma,
-                                          irf = irf,irfpar = c(irfloc,irfwidth),
-                                          seqmod = seqmod)
+      rvs$simData <- simndecay_gen_paramGUI(kinpar=kinpar,
+                                            amplitudes = amplitudes,
+                                            tmax=tmax,
+                                            deltat=deltat,
+                                            specpar=specvec,
+                                            lmin=lmin,
+                                            lmax=lmax,
+                                            deltal=deltal,
+                                            sigma=sigma,
+                                            irf = irf,irfpar = c(irfloc,irfwidth),
+                                            seqmod = seqmod,
+                                            nosiminfo = isolate(rvs$nosiminfo))
 
-    # assign(".sim", isolate(rvs$simData) , globalenv())
-    updateDataPlot(irfloc, linr)
+      # assign(".sim", isolate(rvs$simData) , globalenv())
+      updateDataPlot(irfloc, linr)
     } else {
       cat("Invalid simulation input. No data was generated!", file=stderr())
     }
@@ -464,7 +471,9 @@ server <- function(input, output, session) {
   observeEvent(input$saveDataButton, {
     tryFilename <- paste(isolate(input$simFilename),"-",format(Sys.time(), "%Y%m%d_%H%M"),".rds",sep="")
     tryFullFilename <- file.path(path.expand("~"),tryFilename)
-    saveRDS(isolate(rvs$simData), tryFullFilename)
+    #saveRDS(isolate(rvs$simData), tryFullFilename)
+    sim <- isolate(rvs$simData)
+    save(sim, file=tryFullFilename)
     cat("File was saved to:\n",tryFullFilename,"\n",file=stdout())
 
   }
@@ -524,23 +533,23 @@ server <- function(input, output, session) {
 
   updatePlots <- function(modType="kin", data, model=NULL, result=NULL, theta=NULL, linr = NA) {
     output$fitPlot <- renderPlot({
-      plotterforGUI(modtype=modType, data=data, model=model, result=result, theta=theta, lin = linr, guessIRF = rvs$guessIRF)
+      plotterforGUI(modtype=modType, data=data, model=model, result=result, theta=theta, lin = linr, guessIRF = isolate(rvs$guessIRF))
     },res = 96)
   }
 
   updateDataPlot <- function(irfloc, linr) {
     # Plot the simulated data, and render it to the dataPlot field in output.
     output$dataPlot <- renderPlot({
-      plotterforGUI(modtype="kin", data=isolate(rvs$simData), model=NULL, result=NULL,mu=irfloc,lin=linr,guessIRF = rvs$guessIRF)
+      plotterforGUI(modtype="kin", data=isolate(rvs$simData), model=NULL, result=NULL,mu=irfloc,lin=linr,guessIRF = isolate(rvs$guessIRF))
     },res = 96)
   }
 
   plotMessage <- function(plotmsg = "An arror occured",msgcolor = "black") {
-  par(mar = c(0,0,0,0))
-  plot(c(0, 1), c(0, 1), ann = F, bty = 'n', type = 'n', xaxt = 'n', yaxt = 'n')
-  usr <- par( "usr" )
-  text(x = usr[1], y = usr[4], paste(plotmsg), adj = c( 0, 1),
-       cex = 1.6, col = msgcolor)
+    par(mar = c(0,0,0,0))
+    plot(c(0, 1), c(0, 1), ann = F, bty = 'n', type = 'n', xaxt = 'n', yaxt = 'n')
+    usr <- par( "usr" )
+    text(x = usr[1], y = usr[4], paste(plotmsg), adj = c( 0, 1),
+         cex = 1.6, col = msgcolor)
   }
 
   updateConsole <- function(modelType) {
@@ -612,9 +621,23 @@ server <- function(input, output, session) {
   # Function that listens to key presses
   observe({
     if(!is.null(input$keyPressed)) {
-        # cat("You pressed: ",input$keyPressed,file=stderr())
-      if(input$keyPressed==192) { #ctrl+~
+      # 4 # CTRL+SHIFT+D # Toggle debug
+      # 9 # CTRL+SHIFT+I # Toggle simulation object info
+      # 19 # CTRL+SHIFT+S # Something with save
+      if(isolate(rvs$DEBUG)) {
+        cat("You pressed: ",input$keyPressed[[1]],"\n",file=stderr())
+      }
+      if(input$keyPressed[[1]]==192) { # 192 #ctrl+~
+        if(isolate(rvs$DEBUG)) cat("Toggled guessIRF to: ", !isolate(rvs$guessIRF),"\n")
         rvs$guessIRF <- !isolate(rvs$guessIRF)
+      }
+      if(input$keyPressed[[1]]==9){
+        if(isolate(rvs$DEBUG)) cat("Toggled nosiminfo to: ", !isolate(rvs$nosiminfo),"\n")
+        rvs$nosiminfo <- !isolate(rvs$nosiminfo)
+      }
+      if(input$keyPressed[[1]]==4){
+        cat("Toggled DEBUG to: ", !isolate(rvs$DEBUG),"\n")
+        rvs$DEBUG <- !isolate(rvs$DEBUG)
       }
     }
   })
