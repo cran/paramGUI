@@ -409,7 +409,7 @@ server <- function(input, output, session) {
                                       irfpar = if(irf) irfpar else vector(),
                                       streak = streak,
                                       streakT = 13164.8235,
-                                      positivepar = positivepar,
+                                      positivepar = if(positivepar) c("kinpar") else vector(),
                                       seqmod=seqmod)
 
             rvs$kinFit <- fitModel(data=list(isolate(rvs$simData)), modspec=list(isolate(rvs$kinModel)),opt=kinopt(iter=iters, plot=FALSE))

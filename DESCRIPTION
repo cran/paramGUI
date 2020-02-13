@@ -1,6 +1,6 @@
 Package: paramGUI
 Title: A Shiny GUI for some Parameter Estimation Examples
-Version: 2.1.3
+Version: 2.1.4
 Authors@R: c(person("Joris", "Snellenburg", role = c("cre","aut"),
 		     email = "j.snellenburg@vu.nl"),
 	      person("Katharine", "Mullen", role = "aut"),
@@ -13,12 +13,12 @@ Depends: R (>= 3.0.0), TIMP, shiny, shinydashboard, colorspace, fields
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 7.0.2
 NeedsCompilation: no
-Packaged: 2018-03-15 13:29:47 UTC; Joris
+Packaged: 2020-02-13 15:08:13 UTC; Joris
 Author: Joris Snellenburg [cre, aut],
   Katharine Mullen [aut],
   Ivo van Stokkum [aut]
 Maintainer: Joris Snellenburg <j.snellenburg@vu.nl>
 Repository: CRAN
-Date/Publication: 2018-03-15 13:56:07 UTC
+Date/Publication: 2020-02-13 15:20:03 UTC

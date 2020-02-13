@@ -16,5 +16,5 @@ runGUI()
 
 
 }
-\keyword{GUI,}
+\keyword{GUI}
 \keyword{shiny}

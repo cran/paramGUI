@@ -4,14 +4,40 @@
 \alias{simndecay_gen_paramGUI}
 \title{Simulate data}
 \usage{
-simndecay_gen_paramGUI(kinpar, tmax, deltat, specpar = vector(), lmin, lmax,
-  deltal, sigma, irf = FALSE, irfpar = vector(), seqmod = FALSE,
-  dispmu = FALSE, nocolsums = FALSE, disptau = FALSE, parmu = list(),
-  partau = vector(), lambdac = 0, fullk = FALSE, kmat = matrix(),
-  jvec = vector(), specfun = "gaus", nupow = 1, irffun = "gaus",
-  kinscal = vector(), lightregimespec = list(), specdisp = FALSE,
-  specdisppar = list(), parmufunc = "exp", specdispindex = list(),
-  amplitudes = vector(), specref = 0, nosiminfo = TRUE)
+simndecay_gen_paramGUI(
+  kinpar,
+  tmax,
+  deltat,
+  specpar = vector(),
+  lmin,
+  lmax,
+  deltal,
+  sigma,
+  irf = FALSE,
+  irfpar = vector(),
+  seqmod = FALSE,
+  dispmu = FALSE,
+  nocolsums = FALSE,
+  disptau = FALSE,
+  parmu = list(),
+  partau = vector(),
+  lambdac = 0,
+  fullk = FALSE,
+  kmat = matrix(),
+  jvec = vector(),
+  specfun = "gaus",
+  nupow = 1,
+  irffun = "gaus",
+  kinscal = vector(),
+  lightregimespec = list(),
+  specdisp = FALSE,
+  specdisppar = list(),
+  parmufunc = "exp",
+  specdispindex = list(),
+  amplitudes = vector(),
+  specref = 0,
+  nosiminfo = TRUE
+)
 }
 \arguments{
 \item{kinpar}{vector of rate constants}

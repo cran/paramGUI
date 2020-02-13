@@ -3,7 +3,6 @@
 \docType{package}
 \name{paramGUI}
 \alias{paramGUI}
-\alias{paramGUI-package}
 \title{paramGUI}
 \description{
 paramGUI

@@ -48,6 +48,6 @@ is_rdata <- function(filename) {
 
   magic <- rawToChar(readBin(fh, "raw", 5))
   if(nchar(magic)<5) return(FALSE)
-  if(magic %in% c("RDA1\n","RDB1\n","RDX1\n","RDA2\n","RDB2\n","RDX2\n")) return(TRUE)
+  if(magic %in% c("RDA1\n","RDB1\n","RDX1\n","RDA2\n","RDB2\n","RDX2\n","RDA3\n","RDB3\n","RDX3\n")) return(TRUE)
   return (FALSE)
 }

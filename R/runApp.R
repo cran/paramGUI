@@ -2,7 +2,7 @@
 #'
 #' @description Runs the shiny paramGUI app.
 #'
-#' @keywords GUI, shiny
+#' @keywords GUI shiny
 #' @export
 #' @examples
 #' \dontrun{
@@ -15,7 +15,7 @@ runGUI <- function() {
   if (appDir == "") {
     stop("Could not find example directory. Try re-installing `paramGUI`.", call. = FALSE)
   }
-  
+
   shiny::runApp(appDir, display.mode = "normal")
 }
 
