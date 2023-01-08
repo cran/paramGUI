@@ -34,7 +34,8 @@ plotterforGUI(
 
 \item{mu}{The center of the lin-log axis is \code{lin} is specified}
 
-\item{guessIRF}{Boolean to indicate whether to try and guess the location of the IRF}
+\item{guessIRF}{Boolean to indicate whether to try and guess the
+location of the IRF}
 }
 \value{
 graphics

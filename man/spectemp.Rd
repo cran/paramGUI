@@ -14,12 +14,14 @@ spectemp(sim, model, iter, kroncol = FALSE, lin = NA, l_posk = FALSE)
 \item{iter}{integer number of iterations}
 
 \item{kroncol}{object of class \code{logical} that is
-\code{TRUE} if the \code{kroneckcol} function should be used to formulate the model and
-\code{FALSE} if the standard \code{kronecker} is to be used instead}
+\code{TRUE} if the \code{kroneckcol} function should be used to formulate the
+model and \code{FALSE} if the standard \code{kronecker} is to be used instead}
 
-\item{lin}{defines the range to plot linearly (from -\code{lin} to +\code{lin})}
+\item{lin}{defines the range to plot linearly
+(from -\code{lin} to +\code{lin})}
 
-\item{l_posk}{object of class \code{logical} indicating whether positivity constraints are enforced on the rate parameters}
+\item{l_posk}{object of class \code{logical} indicating whether
+positivity-constraints are enforced on the rate parameters}
 }
 \description{
 Spectrotemporal model

@@ -13,5 +13,6 @@ is_rdata(filename)
 boolean, TRUE if the file is an rdata file
 }
 \description{
-Checks a file is a rdata file by inspecting the file for so called magic bytes
+Checks a file is a rdata file by inspecting the file for
+so called magic bytes
 }

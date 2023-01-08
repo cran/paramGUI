@@ -16,5 +16,6 @@ calcE(theta, lambda)
 }
 \description{
 Calculates a matrix in which each column is a skewed Gaussian.
-Like \code{calcEhiergaus} from TIMP package but uses a vector not a list of parameter estimates.
+Like \code{calcEhiergaus} from TIMP package but uses a vector not a list of
+parameter estimates.
 }

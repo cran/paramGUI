@@ -1,24 +1,27 @@
 Package: paramGUI
 Title: A Shiny GUI for some Parameter Estimation Examples
-Version: 2.1.4
-Authors@R: c(person("Joris", "Snellenburg", role = c("cre","aut"),
-		     email = "j.snellenburg@vu.nl"),
-	      person("Katharine", "Mullen", role = "aut"),
-	      person("Ivo", "van Stokkum", role = "aut",
-		     email = "ivo@few.vu.nl"))
-Description: Allows specification and fitting of some parameter
-    estimation examples inspired by time-resolved spectroscopy via
-    a Shiny GUI.
-Depends: R (>= 3.0.0), TIMP, shiny, shinydashboard, colorspace, fields
+Version: 2.2.0
+Authors@R: c(
+    person("Joris", "Snellenburg", , "j.snellenburg@vu.nl", role = c("cre", "aut")),
+    person("Katharine", "Mullen", role = "aut"),
+    person("Ivo", "van Stokkum", , "i.h.m.van.stokkum@vu.nl", role = "aut")
+  )
+Description: Allows specification and fitting of some parameter estimation
+    examples inspired by time-resolved spectroscopy via a Shiny GUI.
+URL: https://github.com/glotaran/paramGUI/
 License: GPL (>= 2)
+Depends: R (>= 3.0.0)
+Imports: shiny, shinydashboard, TIMP, fields
+BugReports: https://github.com/glotaran/paramGUI/issues
 Encoding: UTF-8
+Language: en-US
 LazyData: true
-RoxygenNote: 7.0.2
+RoxygenNote: 7.2.3
 NeedsCompilation: no
-Packaged: 2020-02-13 15:08:13 UTC; Joris
+Packaged: 2022-12-25 01:33:23 UTC; jsnel
 Author: Joris Snellenburg [cre, aut],
   Katharine Mullen [aut],
   Ivo van Stokkum [aut]
 Maintainer: Joris Snellenburg <j.snellenburg@vu.nl>
 Repository: CRAN
-Date/Publication: 2020-02-13 15:20:03 UTC
+Date/Publication: 2023-01-08 15:00:07 UTC

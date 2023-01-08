@@ -15,5 +15,6 @@ kroneckercol(A, B)
 column-wise kronecker product of A and B
 }
 \description{
-The column-wise kronecker product is also called the Khatri–Rao product
+The column-wise kronecker product is also called
+the Khatri–Rao product
 }

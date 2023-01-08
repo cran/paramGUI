@@ -9,12 +9,13 @@ linlogtics(x, mu, alpha)
 \arguments{
 \item{x}{values for which to calculate a linlog axis}
 
-\item{mu}{center of axis in the orginal \code{x} axis}
+\item{mu}{center of axis in the original \code{x} axis}
 
 \item{alpha}{linear part}
 }
 \value{
-Returns matrix with new \code{x} values in first column and the corresponding labels in the second column.
+Returns matrix with new \code{x} values in first column and the
+corresponding labels in the second column.
 }
 \description{
 Generate linlog tics for a linear-logarithmic axis

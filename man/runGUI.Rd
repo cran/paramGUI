@@ -14,7 +14,6 @@ Runs the shiny paramGUI app.
 runGUI()
 }
 
-
 }
 \keyword{GUI}
 \keyword{shiny}

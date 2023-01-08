@@ -6,14 +6,14 @@
 \alias{datamat}
 \alias{times}
 \alias{waves}
-\title{This is data to be included in my package}
+\title{This is an example dataset included in this package}
 \description{
-Dispersion corrected time-resolved transient-absoprtion data 
-of the peridinin chlorophyll protein (PCP) excited with 490 nm laser light 
+Dispersion corrected time-resolved transient-absorption data
+of the peridinin chlorophyll protein (PCP) excited with 490 nm laser light
 from the publication of Stokkum et.al. (2009)
 }
 \references{
-\url{https://dx.doi.org/10.1016/j.chemphys.2008.10.005}
+\doi{10.1016/j.chemphys.2008.10.005}
 }
 \author{
 Ivo van Stokkum \email{i.h.m.van.stokkum@vu.nl}
